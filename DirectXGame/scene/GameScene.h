@@ -7,11 +7,23 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "Player.h"
 
 /// <summary>
 /// ゲームシーン
 /// </summary>
 class GameScene {
+
+	private:
+	//  テクスチャハンドル
+	uint32_t textureHandle_ = 0;
+	    // 3Dモデルデータ
+	    Model* model_ = nullptr;
+	// ビュープロジェクション
+	ViewProjection viewProjection_;
+	//自キャラ
+	Player* player_ = nullptr;
+
 
 public: // メンバ関数
 	/// <summary>
