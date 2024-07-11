@@ -7,11 +7,28 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include <vector>
+#include "DebugCamera.h"
 
 /// <summary>
 /// ゲームシーン
 /// </summary>
 class GameScene {
+
+	private:
+	// 3Dモデルデータ
+	Model* model_ = nullptr;
+
+	std::vector<std::vector<WorldTransform*>>worldTransformBlocks_;
+
+	// ビュープロジェクション
+	ViewProjection viewProjection_;
+
+	//デバッグカメラ有効
+	bool isDebugCameraActive_ = false;
+
+	// デバッグカメラ
+	DebugCamera* debugCamera_ = nullptr;
 
 public: // メンバ関数
 	/// <summary>
