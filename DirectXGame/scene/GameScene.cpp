@@ -4,6 +4,7 @@
 #include "WorldTransform.h"
 #include <cassert>
 
+
 //02_03
 
 GameScene::GameScene() {}
@@ -13,6 +14,8 @@ GameScene::~GameScene() {
 	delete model_;
 
 	delete debugCamera_;
+
+	delete modelSkydome_;
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -30,6 +33,8 @@ void GameScene::Initialize() {
 
 	// 3Dモデルの生成
 	model_ = Model::Create();
+
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
 	// 要素数
 	const uint32_t kNumBlockVirtical = 10;

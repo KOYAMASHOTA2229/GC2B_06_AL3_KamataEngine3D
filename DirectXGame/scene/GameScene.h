@@ -1,30 +1,33 @@
 #pragma once
 
 #include "Audio.h"
+#include "DebugCamera.h"
 #include "DirectXCommon.h"
 #include "Input.h"
 #include "Model.h"
+#include "Skydome.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include <vector>
-#include "DebugCamera.h"
 
 /// <summary>
 /// ゲームシーン
 /// </summary>
 class GameScene {
 
-	private:
+private:
 	// 3Dモデルデータ
 	Model* model_ = nullptr;
 
-	std::vector<std::vector<WorldTransform*>>worldTransformBlocks_;
+	Model* modelSkydome_ = nullptr;
+
+	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
 
-	//デバッグカメラ有効
+	// デバッグカメラ有効
 	bool isDebugCameraActive_ = false;
 
 	// デバッグカメラ
