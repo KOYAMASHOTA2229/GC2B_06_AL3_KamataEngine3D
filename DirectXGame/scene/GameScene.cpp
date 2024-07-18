@@ -4,9 +4,9 @@
 #include "WorldTransform.h"
 #include <cassert>
 #include "Skydome.h"
+#include "MapChipField.h"
 
-
-//02_03
+//02_04
 
 GameScene::GameScene() {}
 
@@ -19,6 +19,8 @@ GameScene::~GameScene() {
 	delete modelSkydome_;
 
 	delete skydome_;
+
+	delete mapChipField_;
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -70,6 +72,11 @@ void GameScene::Initialize() {
 	skydome_ = new Skydome();
 
 	skydome_->Initialize(modelSkydome_,&viewProjection_);
+
+	mapChipField_ = new MapChipField();
+
+	mapChipField_->LoadMapChipCsv("Resources/block.csv");
+
 
 }
 

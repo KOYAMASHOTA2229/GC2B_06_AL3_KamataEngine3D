@@ -35,6 +35,8 @@ private:
 	// デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;
 
+	MapChipField* mapChipField_;
+
 public: // メンバ関数
 	/// <summary>
 	/// コンストクラタ
