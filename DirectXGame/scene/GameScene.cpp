@@ -3,6 +3,7 @@
 #include "TextureManager.h"
 #include "WorldTransform.h"
 #include <cassert>
+#include "Skydome.h"
 
 
 //02_03
@@ -16,6 +17,8 @@ GameScene::~GameScene() {
 	delete debugCamera_;
 
 	delete modelSkydome_;
+
+	delete skydome_;
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -63,6 +66,10 @@ void GameScene::Initialize() {
 
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
+
+	skydome_ = new Skydome();
+
+	skydome_->Initialize(modelSkydome_,&viewProjection_);
 
 }
 
@@ -137,6 +144,9 @@ void GameScene::Draw() {
 			model_->Draw(*worldTransformBlock, viewProjection_);
 		}
 	}
+
+	skydome_->Draw();
+
 		// 3Dオブジェクト描画後処理
 		Model::PostDraw();
 #pragma endregion

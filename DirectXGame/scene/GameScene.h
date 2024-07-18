@@ -22,6 +22,8 @@ private:
 
 	Model* modelSkydome_ = nullptr;
 
+	Skydome* skydome_ = nullptr;
+
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 
 	// ビュープロジェクション
