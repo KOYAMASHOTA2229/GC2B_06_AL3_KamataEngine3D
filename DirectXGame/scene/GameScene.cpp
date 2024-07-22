@@ -1,12 +1,35 @@
 #include "GameScene.h"
+#include "MapChipField.h"
 #include "Matrix4x4.h"
+#include "Skydome.h"
 #include "TextureManager.h"
 #include "WorldTransform.h"
 #include <cassert>
-#include "Skydome.h"
-#include "MapChipField.h"
 
-//02_04
+// 02_04
+
+void GameScene::GenerateBlocks() {
+	// 要素数
+	uint32_t kNumBlockVirtical = mapChipField_->kNumBlockVirtical;
+	uint32_t kNumBlockHorizontal = mapChipField_->kNumBlockHorizontal;
+
+	// 要素数を変更する
+	worldTransformBlocks_.resize(20);
+	for (uint32_t i = 0; i < 20; i++) {
+		worldTransformBlocks_[i].resize(100);
+	}
+	// キューブの生成
+	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
+		for (uint32_t j = 0; j < kNumBlockHorizontal; ++j) {
+			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock) {
+				WorldTransform* worldTransform = new WorldTransform();
+				worldTransform->Initialize();
+				worldTransformBlocks_[i][j] = worldTransform;
+				worldTransformBlocks_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+			}
+		}
+	}
+}
 
 GameScene::GameScene() {}
 
@@ -41,27 +64,13 @@ void GameScene::Initialize() {
 
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
-	// 要素数
-	const uint32_t kNumBlockVirtical = 10;
-	const uint32_t kNumBlockHorizontal = 20;
-	// ブロック一個分の横幅
-	const float kBlockWidth = 2.0f;
-	const float kBlockHeight = 2.0f;
+	mapChipField_ = new MapChipField();
 
-	// 要素数を変更する
-	worldTransformBlocks_.resize(kNumBlockHorizontal);
-	for (uint32_t i = 0; i < kNumBlockVirtical; i++) {
-		worldTransformBlocks_[i].resize(kNumBlockHorizontal);
-	}
-	// キューブの生成
-	for (uint32_t i = 0; i < kNumBlockVirtical; i+=2) {
-		for (uint32_t j = 0; j < kNumBlockHorizontal; ++j) {
-			worldTransformBlocks_[i][j] = new WorldTransform();
-			worldTransformBlocks_[i][j]->Initialize();
-			worldTransformBlocks_[i][j]->translation_.x = kBlockWidth * j;
-			worldTransformBlocks_[i][j]->translation_.y = kBlockHeight * i;
-		}
-	}
+	mapChipField_->LoadMapChipCsv("Resources/block.csv");
+
+	GenerateBlocks();
+
+	
 
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
@@ -71,13 +80,7 @@ void GameScene::Initialize() {
 
 	skydome_ = new Skydome();
 
-	skydome_->Initialize(modelSkydome_,&viewProjection_);
-
-	mapChipField_ = new MapChipField();
-
-	mapChipField_->LoadMapChipCsv("Resources/block.csv");
-
-
+	skydome_->Initialize(modelSkydome_, &viewProjection_);
 }
 
 void GameScene::Update() {
@@ -94,11 +97,10 @@ void GameScene::Update() {
 		}
 	}
 
-
-	#ifdef _DEBUG
+#ifdef _DEBUG
 
 	if (input_->TriggerKey(DIK_C)) {
-		isDebugCameraActive_ =true;
+		isDebugCameraActive_ = true;
 	}
 
 #endif // DEBUG
@@ -108,12 +110,10 @@ void GameScene::Update() {
 		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
 		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
 
-		    viewProjection_.TransferMatrix();
+		viewProjection_.TransferMatrix();
 	} else {
 		viewProjection_.UpdateMatrix();
 	}
-	
-
 }
 
 void GameScene::Draw() {
@@ -154,20 +154,20 @@ void GameScene::Draw() {
 
 	skydome_->Draw();
 
-		// 3Dオブジェクト描画後処理
-		Model::PostDraw();
+	// 3Dオブジェクト描画後処理
+	Model::PostDraw();
 #pragma endregion
 
 #pragma region 前景スプライト描画
-		// 前景スプライト描画前処理
-		Sprite::PreDraw(commandList);
+	// 前景スプライト描画前処理
+	Sprite::PreDraw(commandList);
 
-		/// <summary>
-		/// ここに前景スプライトの描画処理を追加できる
-		/// </summary>
+	/// <summary>
+	/// ここに前景スプライトの描画処理を追加できる
+	/// </summary>
 
-		// スプライト描画後処理
-		Sprite::PostDraw();
+	// スプライト描画後処理
+	Sprite::PostDraw();
 
 #pragma endregion
-	}
+}

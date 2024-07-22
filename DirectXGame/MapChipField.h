@@ -1,5 +1,8 @@
 #pragma once
-#include "GameScene.h"
+#include <vector>
+#include "Vector3.h"
+#include <string>
+
 
 	enum class MapChipType {
 		kBlank,
@@ -12,6 +15,7 @@
 
 class MapChipField {
 
+	public:
 
 	static inline const float kBlockWidth = 1.0f;
 	static inline const float kBlockHeight = 1.0f;

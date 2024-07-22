@@ -10,6 +10,8 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include <vector>
+#include "MapChipField.h"
+
 
 /// <summary>
 /// ゲームシーン
@@ -36,6 +38,8 @@ private:
 	DebugCamera* debugCamera_ = nullptr;
 
 	MapChipField* mapChipField_;
+
+	void GenerateBlocks();
 
 public: // メンバ関数
 	/// <summary>
