@@ -11,6 +11,7 @@
 #include "WorldTransform.h"
 #include <vector>
 #include "MapChipField.h"
+#include "Player.h"
 
 
 /// <summary>
@@ -25,6 +26,10 @@ private:
 	Model* modelSkydome_ = nullptr;
 
 	Skydome* skydome_ = nullptr;
+
+	Player* player_ = nullptr;
+
+	Model* modelPlayer_ = nullptr;
 
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 

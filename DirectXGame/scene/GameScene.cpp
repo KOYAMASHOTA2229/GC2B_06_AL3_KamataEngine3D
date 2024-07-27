@@ -5,8 +5,36 @@
 #include "TextureManager.h"
 #include "WorldTransform.h"
 #include <cassert>
+#include "Player.h"
 
-// 02_04
+// 02_05
+
+
+GameScene::GameScene() {}
+
+GameScene::~GameScene() {
+
+	delete model_;
+
+	delete debugCamera_;
+
+	delete modelSkydome_;
+
+	delete skydome_;
+
+	delete mapChipField_;
+
+	delete player_;
+
+	delete modelPlayer_;
+
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+			delete worldTransformBlock;
+		}
+	}
+	worldTransformBlocks_.clear();
+}
 
 void GameScene::GenerateBlocks() {
 	// 要素数
@@ -31,28 +59,6 @@ void GameScene::GenerateBlocks() {
 	}
 }
 
-GameScene::GameScene() {}
-
-GameScene::~GameScene() {
-
-	delete model_;
-
-	delete debugCamera_;
-
-	delete modelSkydome_;
-
-	delete skydome_;
-
-	delete mapChipField_;
-
-	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
-		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
-			delete worldTransformBlock;
-		}
-	}
-	worldTransformBlocks_.clear();
-}
-
 void GameScene::Initialize() {
 
 	dxCommon_ = DirectXCommon::GetInstance();
@@ -68,9 +74,16 @@ void GameScene::Initialize() {
 
 	mapChipField_->LoadMapChipCsv("Resources/block.csv");
 
+	modelPlayer_ = Model::CreateFromOBJ("player", true);
+
 	GenerateBlocks();
 
-	
+	//自キャラの位置生成
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 17);
+	// 自キャラの生成
+	player_ = new Player();
+	// 自キャラの初期化
+	player_->Initialize(modelPlayer_, &viewProjection_, playerPosition);
 
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
@@ -78,12 +91,14 @@ void GameScene::Initialize() {
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
 
+	//天球
 	skydome_ = new Skydome();
 
 	skydome_->Initialize(modelSkydome_, &viewProjection_);
 }
 
 void GameScene::Update() {
+	player_->Update();
 	// ブロックの更新
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -142,6 +157,8 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
+
+	player_->Draw();
 
 	// ブロックの描画
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {

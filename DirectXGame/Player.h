@@ -1,0 +1,68 @@
+#pragma once
+#include "Model.h"
+#include "ViewProjection.h"
+#include "WorldTransform.h"
+#include "cassert"
+#include "Vector3.h"
+
+//左右
+enum class LRDirection {
+	kRight,
+	kLeft,
+};
+
+/// <summary>
+/// 自キャラ
+/// </summary>
+class Player {
+private:
+	// ワールド変換データ
+	WorldTransform worldTransform_;
+	// モデル
+	Model* model_ = nullptr;
+	//ビュープロジェクション
+	ViewProjection* viewProjection_ = nullptr;
+
+	Vector3 velocity_ = {};
+
+	//慣性移動
+	static inline const float kAcceleration = 0.05f;
+
+	//速度減衰
+	static inline const float kAttenuation = 0.1f;
+
+	// 最大速度制限
+	static inline const float kLimitRunSpeed = 0.5f;
+
+	LRDirection lrDirection_ = LRDirection::kRight;
+
+	// 旋回開始時の角度
+	float turnFirstRotationY_ = 0.0f;
+	// 旋回タイマー
+	float turnTimer_ = 0.0f;
+	// 旋回時間
+	static inline const float kTimeTurn = 0.3f;
+
+	// 接地状態フラグ
+	bool onGround_ = true;
+
+	// 重力加速度(下方向)
+	static inline const float kGravityAcceleration = 0.5f;
+	// 最大落下速度(下方向)
+	static inline const float kLimitFallSpeed = 0.3f;
+	// ジャンプ初速(上方向)
+	static inline const float kJumpAcceleration = 2.0f;
+
+public:
+	/// 初期化
+	void Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position);
+
+	/// 更新
+	void Update();
+
+	/// 描画
+	void Draw();
+
+	/*float EaseInOutSine(float easing);*/
+
+};
