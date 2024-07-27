@@ -12,6 +12,7 @@
 #include <vector>
 #include "MapChipField.h"
 #include "Player.h"
+#include "CameraController.h"
 
 
 /// <summary>
@@ -43,6 +44,7 @@ private:
 	DebugCamera* debugCamera_ = nullptr;
 
 	MapChipField* mapChipField_;
+
 
 	void GenerateBlocks();
 
