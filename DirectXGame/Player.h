@@ -5,6 +5,9 @@
 #include "cassert"
 #include "Vector3.h"
 
+//前方宣言
+class MapChipField;
+
 //左右
 enum class LRDirection {
 	kRight,
@@ -22,6 +25,8 @@ private:
 	Model* model_ = nullptr;
 	//ビュープロジェクション
 	ViewProjection* viewProjection_ = nullptr;
+
+	MapChipField* mapChipField_ = nullptr;
 
 	Vector3 velocity_ = {};
 
@@ -53,6 +58,10 @@ private:
 	// ジャンプ初速(上方向)
 	static inline const float kJumpAcceleration = 2.0f;
 
+	// キャラクターの当たり判定サイズ
+	static inline const float kWidth = 0.8f;
+	static inline const float kHeight = 0.8f;
+
 public:
 	/// 初期化
 	void Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position);
@@ -66,6 +75,8 @@ public:
 	const WorldTransform& GetWorldTransform() { return worldTransform_; };
 
 	const Vector3& GetVelocity() const { return velocity_; }
+
+	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
 
 	/*float EaseInOutSine(float easing);*/
 

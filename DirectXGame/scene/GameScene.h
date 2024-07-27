@@ -21,7 +21,7 @@
 class GameScene {
 
 private:
-	// 3Dモデルデータ
+	//生成
 	Model* model_ = nullptr;
 
 	Model* modelSkydome_ = nullptr;
@@ -32,6 +32,10 @@ private:
 
 	Model* modelPlayer_ = nullptr;
 
+	DebugCamera* debugCamera_ = nullptr;
+
+	CameraController* cameraController_ = nullptr;
+
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 
 	// ビュープロジェクション
@@ -40,12 +44,7 @@ private:
 	// デバッグカメラ有効
 	bool isDebugCameraActive_ = false;
 
-	// デバッグカメラ
-	DebugCamera* debugCamera_ = nullptr;
-
 	MapChipField* mapChipField_;
-
-	CameraController* cameraController_ = nullptr;
 
 	void GenerateBlocks();
 

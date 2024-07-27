@@ -37,6 +37,7 @@ GameScene::~GameScene() {
 }
 
 void GameScene::GenerateBlocks() {
+
 	// 要素数
 	uint32_t kNumBlockVirtical = mapChipField_->kNumBlockVirtical;
 	uint32_t kNumBlockHorizontal = mapChipField_->kNumBlockHorizontal;
@@ -68,11 +69,11 @@ void GameScene::Initialize() {
 	// 3Dモデルの生成
 	model_ = Model::Create();
 
-	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
-
 	mapChipField_ = new MapChipField();
 
 	mapChipField_->LoadMapChipCsv("Resources/block.csv");
+
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
 	modelPlayer_ = Model::CreateFromOBJ("player", true);
 
@@ -84,6 +85,8 @@ void GameScene::Initialize() {
 	player_ = new Player();
 	// 自キャラの初期化
 	player_->Initialize(modelPlayer_, &viewProjection_, playerPosition);
+
+	player_->SetMapChipField(mapChipField_);
 
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
@@ -99,19 +102,19 @@ void GameScene::Initialize() {
 
 	cameraController_->SetMovableArea({20, 175, 0, 50});
 
-
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
 
 	//天球
 	skydome_ = new Skydome();
-
 	skydome_->Initialize(modelSkydome_, &viewProjection_);
 
 }
 
 void GameScene::Update() {
+
 	player_->Update();
+
 	// ブロックの更新
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
