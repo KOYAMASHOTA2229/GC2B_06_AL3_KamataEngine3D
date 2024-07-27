@@ -88,6 +88,18 @@ void GameScene::Initialize() {
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
+	// カメラコントローラのインスタンス作成
+	cameraController_ = new CameraController();
+	// 初期化処理
+	cameraController_->Initialize();
+	// 追従対象をセット
+	cameraController_->SetTarget(player_);
+	// リセット(瞬間合わせ)
+	cameraController_->Reset();
+
+	cameraController_->SetMovableArea({20, 175, 0, 50});
+
+
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
 
@@ -116,9 +128,16 @@ void GameScene::Update() {
 #ifdef _DEBUG
 
 	if (input_->TriggerKey(DIK_C)) {
-		isDebugCameraActive_ = true;
-	}
+		// デバッグカメラ有効のフラグがおられている時
+		if (isDebugCameraActive_ == false) {
+			// フラグを立てる
+			isDebugCameraActive_ = true;
+		} else if (isDebugCameraActive_ == true) {
+			// フラグを折る
+			isDebugCameraActive_ = false;
 
+			}
+	}
 #endif // DEBUG
 
 	if (isDebugCameraActive_) {
@@ -128,7 +147,15 @@ void GameScene::Update() {
 
 		viewProjection_.TransferMatrix();
 	} else {
-		viewProjection_.UpdateMatrix();
+		// カメラコントローラの更新処理
+		cameraController_->Update();
+
+		// カメラコントローラからビュー行列とプロジェクション行列をコピーする
+		viewProjection_.matView = cameraController_->GetViewProjection().matView;
+		viewProjection_.matProjection = cameraController_->GetViewProjection().matProjection;
+
+		// ビュープロジェクション行列の転送
+		viewProjection_.TransferMatrix();
 	}
 }
 
@@ -159,7 +186,7 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
-	player_->Draw();
+	player_->Draw(viewProjection_);
 
 	// ブロックの描画
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {

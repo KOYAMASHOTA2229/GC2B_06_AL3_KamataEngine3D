@@ -141,8 +141,8 @@ void Player::Update() {
 	worldTransform_.UpdateMatrix();
 }
 
-void Player::Draw() {
+void Player::Draw(const ViewProjection& viewProjection) {
 
 	// 3Dモデルを描画
-	model_->Draw(worldTransform_, *viewProjection_);
+	model_->Draw(worldTransform_, viewProjection);
 }

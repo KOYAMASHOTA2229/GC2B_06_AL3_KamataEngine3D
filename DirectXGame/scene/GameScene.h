@@ -45,6 +45,7 @@ private:
 
 	MapChipField* mapChipField_;
 
+	CameraController* cameraController_ = nullptr;
 
 	void GenerateBlocks();
 

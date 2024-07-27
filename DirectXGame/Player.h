@@ -61,7 +61,11 @@ public:
 	void Update();
 
 	/// 描画
-	void Draw();
+	void Draw(const ViewProjection& viewProjection);
+
+	const WorldTransform& GetWorldTransform() { return worldTransform_; };
+
+	const Vector3& GetVelocity() const { return velocity_; }
 
 	/*float EaseInOutSine(float easing);*/
 
