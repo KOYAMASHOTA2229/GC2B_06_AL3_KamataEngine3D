@@ -6,9 +6,13 @@
 #define _USE_MATH_DEFINES
 #include <algorithm>
 #include <math.h>
+#include "MapChipField.h"
+#include "DebugText.h"
 using namespace std;
 
  float Player::EaseInOutSine(float easing) { return -(cosf(float(M_PI) * easing) - 1) / 2; }
+
+ 
 
 void Player::Move() {
 	if (onGround_) {
@@ -56,6 +60,7 @@ void Player::Move() {
 
 			// 最大速度制限
 			velocity_.x = std::clamp(velocity_.x, -kLimitRunSpeed, kLimitRunSpeed);
+
 
 		} else {
 
@@ -132,6 +137,92 @@ void Player::Rotation() {
 
 }
 
+void Player::CollisionMapJudge(CollisionMapInfo& info) { 
+	CollisionMapUpJudge(info); 
+	/*CollisionMapDownJudge(info);
+	CollisionMapLeftJudge(info);
+	CollisionMapRightJudge(info);*/
+}
+
+void Player::CollisionMapUpJudge(CollisionMapInfo& info) {
+
+	// 上昇あり？
+	if (info.move.y <= 0) {
+		return;
+	}
+
+
+	array<Vector3, static_cast<uint32_t>(Corner::kNumCorner)> positionsNew;
+
+	for (uint32_t index = 0; index < positionsNew.size(); index++) {
+		positionsNew[index] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(index));
+	}
+
+	MapChipType mapChipType;
+
+	// 真上の当たり判定
+	bool hit = false;
+	
+	// 左上
+	IndexSet indexSet;
+
+	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftTop]);
+	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+	if (mapChipType == MapChipType::kBlock) {
+		hit = true;
+	}
+
+	// 右上
+	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightTop]);
+	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+	if (mapChipType == MapChipType::kBlock) {
+		hit = true;
+	}
+
+	// ブロックにヒット?
+	if (hit) {
+		indexSet = mapChipField_->GetMapChipIndexSetByPosition(info.move);
+		mapChipRect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
+		info.move.y = std::max(0.0f, info.move.y);
+		info.hitCeilingFlag = true;
+	}
+}
+
+
+//void Player::CollisionMapDownJudge(CollisionMapInfo& info) {}
+//
+//void Player::CollisionMapLeftJudge(CollisionMapInfo& info) {}
+//
+//void Player::CollisionMapRightJudge(CollisionMapInfo& info) {}
+
+void Player::judgeMove(const CollisionMapInfo& info) {
+
+	worldTransform_.translation_ += info.move;
+
+}
+
+void Player::hitCeilling(const CollisionMapInfo& info) {
+	if (info.hitCeilingFlag) {
+
+		DebugText::GetInstance()->ConsolePrintf("hit ceiling\n");
+		velocity_.y = 0;
+	}
+
+}
+
+Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
+	
+	Vector3 offsetTable[kNumCorner] = {
+	    {+kWidth / 2.0f, -kHeight / 2.0f, 0},
+        {-kWidth / 2.0f, -kHeight / 2.0f, 0},
+        {+kWidth / 2.0f, +kHeight / 2.0f, 0},
+        {-kWidth / 2.0f, +kHeight / 2.0f, 0}
+	};
+
+	return center + offsetTable[static_cast<uint32_t>(corner)];
+}
+
+
 void Player::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position) {
 
 	// NULLポインタチェック
@@ -153,6 +244,13 @@ void Player::Update() {
 
 
 	Move();
+
+	CollisionMapInfo collisionMapInfo;
+	collisionMapInfo.move = velocity_;
+
+	CollisionMapJudge(collisionMapInfo);
+
+	hitCeilling(collisionMapInfo);
 
 	bool isLanding = Landing();
 

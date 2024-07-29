@@ -13,6 +13,18 @@
 		std::vector<std::vector<MapChipType>> data;
 	};
 
+	struct IndexSet {
+	    uint32_t xIndex;
+	    uint32_t yIndex;
+	};
+
+	struct mapChipRect {
+	    float left;
+	    float right;
+	    float bottom;
+	    float top;
+	};
+
 class MapChipField {
 
 	public:
@@ -33,5 +45,7 @@ class MapChipField {
 
 	Vector3 GetMapChipPositionByIndex(uint32_t xIndex, uint32_t yIndex);
 
+	IndexSet GetMapChipIndexSetByPosition(const Vector3& position);
 
+	mapChipRect GetRectByIndex(uint32_t xIndex, uint32_t yIndex);
 };

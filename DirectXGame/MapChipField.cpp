@@ -1,8 +1,8 @@
 #include "MapChipField.h"
+#include <cassert>
 #include <fstream>
 #include <map>
 #include <sstream>
-#include <cassert>
 
 namespace {
 
@@ -67,3 +67,33 @@ MapChipType MapChipField::GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex
 }
 
 Vector3 MapChipField::GetMapChipPositionByIndex(uint32_t xIndex, uint32_t yIndex) { return Vector3(kBlockWidth * xIndex, kBlockHeight * (kNumBlockVirtical - 1 - yIndex), 0); }
+
+IndexSet MapChipField::GetMapChipIndexSetByPosition(const Vector3& position) {
+
+
+	// X番号
+	uint32_t xIndex = static_cast<uint32_t>((position.x + kBlockWidth / 2.0f) / kBlockWidth);
+
+	// 反転前Y番号
+	uint32_t beforeYindex = static_cast<uint32_t>((position.y + kBlockHeight / 2.0f) / kBlockHeight);
+
+	// 正しいY番号
+	uint32_t yIndex = kNumBlockVirtical - 1 - beforeYindex;
+
+	IndexSet indexSet{xIndex, yIndex};
+
+	return indexSet;
+}
+
+mapChipRect MapChipField::GetRectByIndex(uint32_t xIndex, uint32_t yIndex) { 
+	
+	Vector3 center = GetMapChipPositionByIndex(xIndex, yIndex);
+
+	mapChipRect rect;
+	rect.left = center.x - kBlockWidth / 2.0f;    
+	rect.right = center.x + kBlockWidth / 2.0f;  
+	rect.bottom = center.y - kBlockHeight / 2.0f;
+	rect.top = center.y + kBlockHeight / 2.0f;
+
+	return rect;
+}

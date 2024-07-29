@@ -16,6 +16,16 @@ struct CollisionMapInfo {
 	Vector3 move;
 };
 
+//角
+enum Corner {
+	kRightBottom,
+	kLeftBottom,
+	kRightTop,
+	kLeftTop,
+
+	kNumCorner
+};
+
 //左右
 enum class LRDirection {
 	kRight,
@@ -75,6 +85,23 @@ private:
 	void SwitchOnGround(bool landing);
 
 	void Rotation();
+
+	void CollisionMapJudge(CollisionMapInfo& info);
+
+	void CollisionMapUpJudge(CollisionMapInfo& info);
+	/*void CollisionMapDownJudge(CollisionMapInfo& info);
+	void CollisionMapLeftJudge(CollisionMapInfo& info);
+	void CollisionMapRightJudge(CollisionMapInfo& info);*/
+
+	//反映させて移動
+	void judgeMove(const CollisionMapInfo& info);
+
+	//天井接地時
+	void hitCeilling(const CollisionMapInfo& info);
+
+	Vector3 CornerPosition(const Vector3& center, Corner corner);
+
+	static inline const float kBlank = 1.0f;
 
 public:
 	/// 初期化
