@@ -8,6 +8,14 @@
 //前方宣言
 class MapChipField;
 
+struct CollisionMapInfo {
+	bool hitCeilingFlag = false;
+	bool isLandingFlag = false;
+	bool hitWallFlag = false;
+
+	Vector3 move;
+};
+
 //左右
 enum class LRDirection {
 	kRight,
@@ -62,6 +70,12 @@ private:
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;
 
+	void Move();
+	bool Landing();
+	void SwitchOnGround(bool landing);
+
+	void Rotation();
+
 public:
 	/// 初期化
 	void Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position);
@@ -78,6 +92,7 @@ public:
 
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
 
-	/*float EaseInOutSine(float easing);*/
+	float EaseInOutSine(float easing);
+
 
 };
