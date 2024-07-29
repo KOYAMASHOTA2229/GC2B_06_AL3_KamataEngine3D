@@ -69,18 +69,19 @@ void GameScene::Initialize() {
 	// 3Dモデルの生成
 	model_ = Model::Create();
 
-	mapChipField_ = new MapChipField();
-
-	mapChipField_->LoadMapChipCsv("Resources/block.csv");
-
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
 	modelPlayer_ = Model::CreateFromOBJ("player", true);
 
+
+	mapChipField_ = new MapChipField();
+
+	mapChipField_->LoadMapChipCsv("Resources/block.csv");
+
 	GenerateBlocks();
 
 	//自キャラの位置生成
-	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 17);
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1, 18);
 	// 自キャラの生成
 	player_ = new Player();
 	// 自キャラの初期化
