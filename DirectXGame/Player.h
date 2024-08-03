@@ -78,7 +78,15 @@ private:
 
 	// キャラクターの当たり判定サイズ
 	static inline const float kWidth = 0.8f;
-	static inline const float kHeight = 0.8f;
+	static inline const float kHeight = 2.0f;
+
+	static inline const float kAttenuationLanding = 0.4f;
+	static inline const float kAttenuationWall = 1.0f;
+
+	static inline const float kBlankWidth = 0.1f;
+	static inline const float kBlankHeight = 0.1f;
+
+	static inline const float kBlank = 0.1f;
 
 	void Move();
 	bool Landing();
@@ -89,9 +97,9 @@ private:
 	void CollisionMapJudge(CollisionMapInfo& info);
 
 	void CollisionMapUpJudge(CollisionMapInfo& info);
-	/*void CollisionMapDownJudge(CollisionMapInfo& info);
+	void CollisionMapDownJudge(CollisionMapInfo& info);
 	void CollisionMapLeftJudge(CollisionMapInfo& info);
-	void CollisionMapRightJudge(CollisionMapInfo& info);*/
+	void CollisionMapRightJudge(CollisionMapInfo& info);
 
 	//反映させて移動
 	void judgeMove(const CollisionMapInfo& info);
@@ -101,7 +109,12 @@ private:
 
 	Vector3 CornerPosition(const Vector3& center, Corner corner);
 
-	static inline const float kBlank = 1.0f;
+	//接地の状態
+	void groundState(const CollisionMapInfo& info);
+	//上記の切り替え
+	void switchState(const CollisionMapInfo& info);
+
+	void touchWall(const CollisionMapInfo& info);
 
 public:
 	/// 初期化
