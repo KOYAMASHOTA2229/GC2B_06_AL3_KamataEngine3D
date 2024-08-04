@@ -12,8 +12,6 @@ using namespace std;
 
  float Player::EaseInOutSine(float easing) { return -(cosf(float(M_PI) * easing) - 1) / 2; }
 
- 
-
 void Player::Move() {
 	if (onGround_) {
 		if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT)) {

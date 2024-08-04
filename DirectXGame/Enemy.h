@@ -26,14 +26,13 @@ private:
 
 	Vector3 velocity_ = {};
 
-	//首振り
-	//最初の角度
+	// 首振り
+	// 最初の角度
 	static inline const float kWalkMotionAngleStart = 0.0f;
-	//最後の角度
+	// 最後の角度
 	static inline const float kWalkMotionAngleEnd = 20.0f;
-	//アニメーションの周期となる時間
+	// アニメーションの周期となる時間
 	static inline const float kWalkMotionTime = 3.0f;
 
 	float walkTimer_ = 0.0f;
-
 };

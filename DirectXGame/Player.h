@@ -5,6 +5,7 @@
 #include "cassert"
 #include "Vector3.h"
 
+
 //前方宣言
 class MapChipField;
 
@@ -133,6 +134,9 @@ public:
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
 
 	float EaseInOutSine(float easing);
+
+	// ワールド座標を取得
+	Vector3 GetWorldPosition();
 
 
 };
