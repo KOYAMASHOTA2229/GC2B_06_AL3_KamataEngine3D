@@ -1,8 +1,13 @@
 #include "Model.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "structAABB.h"
+
+
 
 #pragma once
+
+class Player;
 
 class Enemy {
 
@@ -14,6 +19,10 @@ public:
 	void Update();
 
 	void Draw(const ViewProjection& viewprojection);
+
+	Vector3 GetWorldPosition();
+
+	AABB GetAABB();
 
 private:
 	Model* model_;
@@ -35,4 +44,8 @@ private:
 	static inline const float kWalkMotionTime = 3.0f;
 
 	float walkTimer_ = 0.0f;
+
+	static inline const float kWidth = 2.0f;
+	static inline const float kHeight = 2.0f;
+
 };

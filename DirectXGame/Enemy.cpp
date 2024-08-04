@@ -4,6 +4,8 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 
+
+
 void Enemy::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position) {
 
 	assert(model);
@@ -46,3 +48,28 @@ void Enemy::Update() {
 }
 
 void Enemy::Draw(const ViewProjection& viewprojection) { model_->Draw(worldTransform_, viewprojection); }
+
+Vector3 Enemy::GetWorldPosition() { 
+
+	Vector3 worldPos;
+
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
+
+	return worldPos;
+
+}
+
+AABB Enemy::GetAABB() { 
+
+	Vector3 worldPos = Enemy::GetWorldPosition();
+
+	AABB aabb;
+
+	aabb.min = {worldPos.x - kWidth / 2.0f, worldPos.y - kHeight / 2.0f, worldPos.z - kWidth / 2.0f};
+	aabb.max = {worldPos.x + kWidth / 2.0f, worldPos.y + kHeight / 2.0f, worldPos.z + kWidth / 2.0f};
+
+	return aabb;
+
+}

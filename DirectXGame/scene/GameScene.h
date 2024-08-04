@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Audio.h"
 #include "CameraController.h"
 #include "DebugCamera.h"
@@ -12,13 +13,13 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include <vector>
-
 #include "Enemy.h"
+#include "structAABB.h"
 
 /// <summary>
 /// ゲームシーン
 /// </summary>
-class GameScene {
+class GameScene:public AABB {
 private:
 	// 生成
 	Model* model_ = nullptr;
@@ -56,6 +57,9 @@ public: // メンバ関数
 	/// 初期化
 	/// </summary>
 	void Initialize();
+
+	void CheckAllCollision();
+
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>

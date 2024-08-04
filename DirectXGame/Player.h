@@ -4,6 +4,9 @@
 #include "WorldTransform.h"
 #include "cassert"
 #include "Vector3.h"
+#include "structAABB.h"
+
+
 
 
 //前方宣言
@@ -138,5 +141,6 @@ public:
 	// ワールド座標を取得
 	Vector3 GetWorldPosition();
 
+	AABB GetAABB();
 
 };

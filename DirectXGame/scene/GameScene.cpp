@@ -6,6 +6,7 @@
 #include "TextureManager.h"
 #include "WorldTransform.h"
 #include <cassert>
+
 // 02_05
 GameScene::GameScene() {}
 GameScene::~GameScene() {
