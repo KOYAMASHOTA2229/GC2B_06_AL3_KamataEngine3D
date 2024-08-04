@@ -13,7 +13,7 @@
 #include "MapChipField.h"
 #include "Player.h"
 #include "CameraController.h"
-
+#include "Enemy.h"
 
 /// <summary>
 /// ゲームシーン
@@ -35,6 +35,10 @@ private:
 	DebugCamera* debugCamera_ = nullptr;
 
 	CameraController* cameraController_ = nullptr;
+
+	Model* modelEnemy_ = nullptr;
+
+	Enemy* enemy_ = nullptr;
 
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 

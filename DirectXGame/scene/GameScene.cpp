@@ -28,6 +28,10 @@ GameScene::~GameScene() {
 
 	delete modelPlayer_;
 
+	delete enemy_;
+
+	delete modelEnemy_;
+
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			delete worldTransformBlock;
@@ -73,6 +77,7 @@ void GameScene::Initialize() {
 
 	modelPlayer_ = Model::CreateFromOBJ("player", true);
 
+	modelEnemy_ = Model::CreateFromOBJ("enemy", true);
 
 	mapChipField_ = new MapChipField();
 
@@ -86,6 +91,13 @@ void GameScene::Initialize() {
 	player_ = new Player();
 	// 自キャラの初期化
 	player_->Initialize(modelPlayer_, &viewProjection_, playerPosition);
+
+	//敵キャラの位置生成
+	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(8, 18);
+	//敵キャラの生成
+	enemy_ = new Enemy();
+	//敵キャラの初期化
+	enemy_->Initialize(modelEnemy_, &viewProjection_, enemyPosition);
 
 	player_->SetMapChipField(mapChipField_);
 
@@ -115,6 +127,8 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 
 	player_->Update();
+
+	enemy_->Update();
 
 	// ブロックの更新
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
@@ -191,6 +205,8 @@ void GameScene::Draw() {
 	/// </summary>
 
 	player_->Draw(viewProjection_);
+
+	enemy_->Draw(viewProjection_);
 
 	// ブロックの描画
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
