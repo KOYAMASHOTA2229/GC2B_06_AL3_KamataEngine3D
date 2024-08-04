@@ -118,6 +118,10 @@ void GameScene::Initialize() {
 	// 天球
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_, &viewProjection_);
+
+	// ゲームプレイフェーズから開始
+	phase_ = Phase::kPlay;
+
 }
 
 void GameScene::CheckAllCollision() {
@@ -140,35 +144,31 @@ void GameScene::CheckAllCollision() {
 				enemy->OnCollision(player_);
 			}
 		}
+	// 自キャラがデス状態
+	if (player_->GetIsDead()) {
 
+		phase_ = Phase::kDeath;
+
+		const Vector3& deathParticlesPosition = player_->GetWorldPosition();
+
+		deathParticles_ = new DeathParticles();
+		deathParticles_->Initialize(modelDeathParticles_, &viewProjection_, deathParticlesPosition);
+	}
 #pragma endregion
 
 }
 
 
-void GameScene::Update() {
+void GameScene::UpdatekPlay() {
 
+	//自キャラの更新
 	player_->Update();
 
+	//敵の更新
 	for (Enemy* enemy : enemies_) {
 		enemy->Update();
 	}
 
-	// デス演出用パーティクルの更新処理
-	if (deathParticles_ != nullptr) {
-		deathParticles_->Update();
-	}
-
-	// ブロックの更新
-	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
-		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
-			if (!worldTransformBlock)
-				continue;
-			worldTransformBlock->matWorld_ = Matrix4x4::MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
-			// 定数バッファに転送
-			worldTransformBlock->TransferMatrix();
-		}
-	}
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_C)) {
 		// デバッグカメラ有効のフラグがおられている時
@@ -196,9 +196,60 @@ void GameScene::Update() {
 		viewProjection_.TransferMatrix();
 	}
 
+	// ブロックの更新
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+			if (!worldTransformBlock)
+				continue;
+			worldTransformBlock->matWorld_ = Matrix4x4::MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
+			// 定数バッファに転送
+			worldTransformBlock->TransferMatrix();
+		}
+	}
+	//全ての当たり判定
 	GameScene::CheckAllCollision();
 
 }
+
+void GameScene::UpdateKDeath() {
+
+	// 敵の更新
+	for (Enemy* enemy : enemies_) {
+		enemy->Update();
+	}
+
+	// デス演出用パーティクルの更新処理
+	if (deathParticles_ != nullptr) {
+		deathParticles_->Update();
+	}
+
+	if (input_->TriggerKey(DIK_SPACE)) {
+		if (isDebugCameraActive_ == false) {
+			isDebugCameraActive_ = true;
+		} else if (isDebugCameraActive_ == true) {
+			isDebugCameraActive_ = false;
+		}
+	}
+	// デバッグカメラ有効のフラグが立っている時に
+	if (isDebugCameraActive_ == true) {
+		debugCamera_->Update();
+		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+		viewProjection_.TransferMatrix();
+	}
+	// ブロックの更新処理
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+			if (!worldTransformBlock) {
+				continue;
+			}
+			worldTransformBlock->UpdateMatrix();
+		}
+	}
+}
+
+
+
 void GameScene::Draw() {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
@@ -252,4 +303,21 @@ void GameScene::Draw() {
 	// スプライト描画後処理
 	Sprite::PostDraw();
 #pragma endregion
+}
+
+void GameScene::ChangePhase() {
+
+	switch (phase_) {
+	case Phase::kPlay:
+
+		GameScene::UpdatekPlay();
+
+		break;
+
+	case Phase::kDeath:
+
+		GameScene::UpdateKDeath();
+
+		break;
+	}
 }

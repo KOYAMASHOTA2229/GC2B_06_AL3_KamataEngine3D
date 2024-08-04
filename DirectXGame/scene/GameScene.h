@@ -17,6 +17,11 @@
 #include "crossJudge.h"
 #include "DeathParticles.h"
 
+enum class Phase {
+	kPlay,
+	kDeath,
+};
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -48,6 +53,9 @@ private:
 	MapChipField* mapChipField_;
 	void GenerateBlocks();
 
+	// 現在の現在フェーズ
+	Phase phase_;
+
 public: // メンバ関数
 	/// <summary>
 	/// コンストクラタ
@@ -63,6 +71,12 @@ public: // メンバ関数
 	void Initialize();
 
 	void CheckAllCollision();
+
+	void UpdatekPlay();
+
+	void UpdateKDeath();
+
+	void ChangePhase();
 
 	/// <summary>
 	/// 毎フレーム処理

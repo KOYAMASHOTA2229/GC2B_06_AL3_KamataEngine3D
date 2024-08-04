@@ -43,6 +43,8 @@ void Player::OnCollision(Enemy* enemy) {
 
 	(void)enemy;
 
+	isDead_ = true;
+
 }
 
 void Player::Move() {
@@ -492,6 +494,9 @@ void Player::Update() {
 
 void Player::Draw(const ViewProjection& viewProjection) {
 
-	// 3Dモデルを描画
-	model_->Draw(worldTransform_, viewProjection);
+	
+	if (!isDead_) {
+		model_->Draw(worldTransform_, *viewProjection_);
+	}
+
 }

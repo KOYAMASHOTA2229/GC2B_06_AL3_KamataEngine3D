@@ -91,6 +91,8 @@ private:
 
 	static inline const float kBlank = 0.1f;
 
+	bool isDead_ = false;
+
 	void Move();
 	bool Landing();
 	void SwitchOnGround(bool landing);
@@ -141,6 +143,8 @@ public:
 	Vector3 GetWorldPosition();
 
 	AABB GetAABB();
+
+	bool GetIsDead() const { return this->isDead_; }
 
 	void OnCollision(Enemy* enemy);
 
