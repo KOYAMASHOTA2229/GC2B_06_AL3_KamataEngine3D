@@ -39,6 +39,15 @@ AABB Player::GetAABB() {
 
 }
 
+void Player::OnCollision(Enemy* enemy) {
+
+	(void)enemy;
+
+	//仮ジャンプ
+	velocity_ += Vector3(1, 1.0f, 1);
+
+}
+
 void Player::Move() {
 	if (onGround_) {
 		if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT)) {

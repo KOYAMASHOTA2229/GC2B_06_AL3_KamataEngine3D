@@ -14,12 +14,12 @@
 #include "WorldTransform.h"
 #include <vector>
 #include "Enemy.h"
-#include "structAABB.h"
+#include "crossJudge.h"
 
 /// <summary>
 /// ゲームシーン
 /// </summary>
-class GameScene:public AABB {
+class GameScene:public crossJudge {
 private:
 	// 生成
 	Model* model_ = nullptr;

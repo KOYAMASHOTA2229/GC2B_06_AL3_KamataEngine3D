@@ -7,10 +7,9 @@
 #include "structAABB.h"
 
 
-
-
 //前方宣言
 class MapChipField;
+class Enemy;
 
 struct CollisionMapInfo {
 	bool hitCeilingFlag = false;
@@ -142,5 +141,7 @@ public:
 	Vector3 GetWorldPosition();
 
 	AABB GetAABB();
+
+	void OnCollision(Enemy* enemy);
 
 };

@@ -73,3 +73,5 @@ AABB Enemy::GetAABB() {
 	return aabb;
 
 }
+
+void Enemy::OnCollision(Player* player) { (void)player; }

@@ -4,9 +4,9 @@
 #include "structAABB.h"
 
 
-
 #pragma once
 
+//前方宣言
 class Player;
 
 class Enemy {
@@ -23,6 +23,8 @@ public:
 	Vector3 GetWorldPosition();
 
 	AABB GetAABB();
+
+	void OnCollision(Player* player);
 
 private:
 	Model* model_;

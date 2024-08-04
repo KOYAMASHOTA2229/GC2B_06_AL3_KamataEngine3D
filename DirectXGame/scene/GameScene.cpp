@@ -108,6 +108,33 @@ void GameScene::Initialize() {
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_, &viewProjection_);
 }
+
+void GameScene::CheckAllCollision() {
+
+	#pragma region 自キャラと敵キャラの当たり判定
+
+	AABB aabb1, aabb2;
+
+	aabb1 = player_->GetAABB();
+	
+	for (Enemy* enemy : enemies_) {
+
+		aabb2 = enemy->GetAABB();
+
+			// AABB同士の交差判定
+			if (IsCollision(aabb1, aabb2)) {
+				// 自キャラの衝突時コールバック関数を呼び出す
+				player_->OnCollision(enemy);
+
+				enemy->OnCollision(player_);
+			}
+		}
+
+#pragma endregion
+
+}
+
+
 void GameScene::Update() {
 
 	player_->Update();
@@ -152,6 +179,9 @@ void GameScene::Update() {
 		// ビュープロジェクション行列の転送
 		viewProjection_.TransferMatrix();
 	}
+
+	GameScene::CheckAllCollision();
+
 }
 void GameScene::Draw() {
 	// コマンドリストの取得
