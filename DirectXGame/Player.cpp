@@ -43,9 +43,6 @@ void Player::OnCollision(Enemy* enemy) {
 
 	(void)enemy;
 
-	//仮ジャンプ
-	velocity_ += Vector3(1, 1.0f, 1);
-
 }
 
 void Player::Move() {

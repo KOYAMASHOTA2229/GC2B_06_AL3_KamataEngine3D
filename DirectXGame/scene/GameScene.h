@@ -15,6 +15,7 @@
 #include <vector>
 #include "Enemy.h"
 #include "crossJudge.h"
+#include "DeathParticles.h"
 
 /// <summary>
 /// ゲームシーン
@@ -32,8 +33,11 @@ private:
 	CameraController* cameraController_ = nullptr;
 
 	Model* modelEnemy_ = nullptr;
-
 	std::list<Enemy*> enemies_;
+
+	Model* modelDeathParticles_ = nullptr;
+	DeathParticles* deathParticles_ = nullptr;
+
 
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 

@@ -9,4 +9,8 @@ class crossJudge {
 
 		static bool IsCollision(const AABB& aabb1, const AABB& aabb2);
 
+		static Matrix4x4 MakeRotateZMatrix(float radian);
+
+		static Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix);
+
 };

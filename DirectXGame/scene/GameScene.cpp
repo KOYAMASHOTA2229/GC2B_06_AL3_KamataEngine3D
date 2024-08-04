@@ -26,6 +26,12 @@ GameScene::~GameScene() {
 
 	delete modelEnemy_;
 
+	delete modelDeathParticles_;
+
+	if (deathParticles_ != nullptr) {
+		delete deathParticles_;
+	}
+
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			delete worldTransformBlock;
@@ -77,9 +83,14 @@ void GameScene::Initialize() {
 	// 自キャラの初期化
 	player_->Initialize(modelPlayer_, &viewProjection_, playerPosition);
 
+	// デス演出用パーティクルの生成と初期化
+	modelDeathParticles_ = Model::CreateFromOBJ("deathParticles", true);
+	deathParticles_ = new DeathParticles();
+	deathParticles_->Initialize(modelDeathParticles_, &viewProjection_, playerPosition);
+
 	// 敵キャラの位置生成
 	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(8, 18);
-	for (int32_t i = 0; i < 3; i++) {
+	for (int32_t i = 0; i < 1; i++) {
 		Enemy* newEnemy = new Enemy();
 
 		// X座標とY座標の計算を直接行う
@@ -141,6 +152,11 @@ void GameScene::Update() {
 
 	for (Enemy* enemy : enemies_) {
 		enemy->Update();
+	}
+
+	// デス演出用パーティクルの更新処理
+	if (deathParticles_ != nullptr) {
+		deathParticles_->Update();
 	}
 
 	// ブロックの更新
@@ -205,6 +221,11 @@ void GameScene::Draw() {
 	/// </summary>
 
 	player_->Draw(viewProjection_);
+
+	// デス演出用パーティクルの描画
+	if (deathParticles_ != nullptr) {
+		deathParticles_->Draw();
+	}
 
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw(viewProjection_);
