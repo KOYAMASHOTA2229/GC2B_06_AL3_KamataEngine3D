@@ -6,6 +6,7 @@
 #include "TextureManager.h"
 #include "WorldTransform.h"
 #include <cassert>
+#include "TitleScene.h"
 
 // 02_05
 GameScene::GameScene() {}
@@ -67,6 +68,8 @@ void GameScene::Initialize() {
 	// 3Dモデルの生成
 	model_ = Model::Create();
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+
+	textureHandle_ = TextureManager::Load("TITLE.png");
 
 	modelPlayer_ = Model::CreateFromOBJ("player", true);
 

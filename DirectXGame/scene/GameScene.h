@@ -27,6 +27,9 @@ enum class Phase {
 /// </summary>
 class GameScene {
 private:
+
+	//  テクスチャハンドル
+	uint32_t textureHandle_ = 0;
 	// 生成
 	Model* model_ = nullptr;
 	Model* modelSkydome_ = nullptr;
