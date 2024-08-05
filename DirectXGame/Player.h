@@ -86,7 +86,7 @@ private:
 	static inline const float kBlankWidth = 0.1f;
 	static inline const float kBlankHeight = 0.1f;
 
-	static inline const float kBlank = 0.1f;
+	static inline const float kBlank = 1.0f;
 
 	void Move();
 	bool Landing();
