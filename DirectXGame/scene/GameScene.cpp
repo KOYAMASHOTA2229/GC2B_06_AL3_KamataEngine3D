@@ -137,7 +137,7 @@ void GameScene::CheckAllCollision() {
 		aabb2 = enemy->GetAABB();
 
 			// AABB同士の交差判定
-			if (IsCollision(aabb1, aabb2)) {
+			if (crossJudge::IsCollision(aabb1, aabb2)) {
 				// 自キャラの衝突時コールバック関数を呼び出す
 				player_->OnCollision(enemy);
 
@@ -158,95 +158,96 @@ void GameScene::CheckAllCollision() {
 
 }
 
+void ::GameScene::Update() { GameScene::ChangePhase(); }
 
-void GameScene::UpdatekPlay() {
+	void GameScene::UpdatekPlay() {
 
-	//自キャラの更新
-	player_->Update();
+		// 自キャラの更新
+		player_->Update();
 
-	//敵の更新
-	for (Enemy* enemy : enemies_) {
-		enemy->Update();
-	}
+		// 敵の更新
+		for (Enemy* enemy : enemies_) {
+			enemy->Update();
+		}
+
+		// ブロックの更新
+		for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+			for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+				if (!worldTransformBlock)
+					continue;
+				worldTransformBlock->matWorld_ = Matrix4x4::MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
+				// 定数バッファに転送
+				worldTransformBlock->TransferMatrix();
+			}
+		}
 
 #ifdef _DEBUG
-	if (input_->TriggerKey(DIK_C)) {
-		// デバッグカメラ有効のフラグがおられている時
-		if (isDebugCameraActive_ == false) {
-			// フラグを立てる
-			isDebugCameraActive_ = true;
-		} else if (isDebugCameraActive_ == true) {
-			// フラグを折る
-			isDebugCameraActive_ = false;
-		}
-	}
-#endif // DEBUG
-	if (isDebugCameraActive_) {
-		debugCamera_->Update();
-		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
-		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
-		viewProjection_.TransferMatrix();
-	} else {
-		// カメラコントローラの更新処理
-		cameraController_->Update();
-		// カメラコントローラからビュー行列とプロジェクション行列をコピーする
-		viewProjection_.matView = cameraController_->GetViewProjection().matView;
-		viewProjection_.matProjection = cameraController_->GetViewProjection().matProjection;
-		// ビュープロジェクション行列の転送
-		viewProjection_.TransferMatrix();
-	}
-
-	// ブロックの更新
-	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
-		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
-			if (!worldTransformBlock)
-				continue;
-			worldTransformBlock->matWorld_ = Matrix4x4::MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
-			// 定数バッファに転送
-			worldTransformBlock->TransferMatrix();
-		}
-	}
-	//全ての当たり判定
-	GameScene::CheckAllCollision();
-
-}
-
-void GameScene::UpdateKDeath() {
-
-	// 敵の更新
-	for (Enemy* enemy : enemies_) {
-		enemy->Update();
-	}
-
-	// デス演出用パーティクルの更新処理
-	if (deathParticles_ != nullptr) {
-		deathParticles_->Update();
-	}
-
-	if (input_->TriggerKey(DIK_SPACE)) {
-		if (isDebugCameraActive_ == false) {
-			isDebugCameraActive_ = true;
-		} else if (isDebugCameraActive_ == true) {
-			isDebugCameraActive_ = false;
-		}
-	}
-	// デバッグカメラ有効のフラグが立っている時に
-	if (isDebugCameraActive_ == true) {
-		debugCamera_->Update();
-		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
-		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
-		viewProjection_.TransferMatrix();
-	}
-	// ブロックの更新処理
-	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
-		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
-			if (!worldTransformBlock) {
-				continue;
+		if (input_->TriggerKey(DIK_C)) {
+			// デバッグカメラ有効のフラグがおられている時
+			if (isDebugCameraActive_ == false) {
+				// フラグを立てる
+				isDebugCameraActive_ = true;
+			} else if (isDebugCameraActive_ == true) {
+				// フラグを折る
+				isDebugCameraActive_ = false;
 			}
-			worldTransformBlock->UpdateMatrix();
+		}
+#endif // DEBUG
+		if (isDebugCameraActive_) {
+			debugCamera_->Update();
+			viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+			viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+			viewProjection_.TransferMatrix();
+		} else {
+			// カメラコントローラの更新処理
+			cameraController_->Update();
+			// カメラコントローラからビュー行列とプロジェクション行列をコピーする
+			viewProjection_.matView = cameraController_->GetViewProjection().matView;
+			viewProjection_.matProjection = cameraController_->GetViewProjection().matProjection;
+			// ビュープロジェクション行列の転送
+			viewProjection_.TransferMatrix();
+		}
+
+		// 全ての当たり判定
+		GameScene::CheckAllCollision();
+	}
+
+	void GameScene::UpdateKDeath() {
+
+		// 敵の更新
+		for (Enemy* enemy : enemies_) {
+			enemy->Update();
+		}
+
+		// デス演出用パーティクルの更新処理
+		if (deathParticles_ != nullptr) {
+			deathParticles_->Update();
+		}
+
+		if (input_->TriggerKey(DIK_SPACE)) {
+			if (isDebugCameraActive_ == false) {
+				isDebugCameraActive_ = true;
+			} else if (isDebugCameraActive_ == true) {
+				isDebugCameraActive_ = false;
+			}
+		}
+		// デバッグカメラ有効のフラグが立っている時に
+		if (isDebugCameraActive_ == true) {
+			debugCamera_->Update();
+			viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+			viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+			viewProjection_.TransferMatrix();
+		}
+		// ブロックの更新処理
+		for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+			for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+				if (!worldTransformBlock) {
+					continue;
+				}
+				worldTransformBlock->UpdateMatrix();
+			}
 		}
 	}
-}
 
 
 
@@ -271,7 +272,7 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
-	player_->Draw(viewProjection_);
+	player_->Draw();
 
 	// デス演出用パーティクルの描画
 	if (deathParticles_ != nullptr) {

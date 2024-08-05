@@ -492,7 +492,7 @@ void Player::Update() {
 	worldTransform_.UpdateMatrix();
 }
 
-void Player::Draw(const ViewProjection& viewProjection) {
+void Player::Draw() {
 
 	
 	if (!isDead_) {

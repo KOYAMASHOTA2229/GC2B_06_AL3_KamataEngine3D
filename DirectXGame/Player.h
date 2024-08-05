@@ -129,7 +129,7 @@ public:
 	void Update();
 
 	/// 描画
-	void Draw(const ViewProjection& viewProjection);
+	void Draw();
 
 	const WorldTransform& GetWorldTransform() { return worldTransform_; };
 

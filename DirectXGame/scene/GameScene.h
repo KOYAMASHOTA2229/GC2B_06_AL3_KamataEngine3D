@@ -25,7 +25,7 @@ enum class Phase {
 /// <summary>
 /// ゲームシーン
 /// </summary>
-class GameScene:public crossJudge {
+class GameScene {
 private:
 	// 生成
 	Model* model_ = nullptr;
