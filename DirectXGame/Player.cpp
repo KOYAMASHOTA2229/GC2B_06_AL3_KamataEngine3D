@@ -58,6 +58,7 @@ void Player::Move() {
 			// 加速減速
 			velocity_ += acceleration;
 
+
 			// 最大速度制限
 			velocity_.x = std::clamp(velocity_.x, -kLimitRunSpeed, kLimitRunSpeed);
 
@@ -435,13 +436,15 @@ void Player::Update() {
 
 	Move();
 
-	// 移動
-	worldTransform_.translation_ += velocity_;
+	//// 移動
+	//worldTransform_.translation_ += velocity_;
 
 	CollisionMapInfo collisionMapInfo;
 	collisionMapInfo.move = velocity_;
 
 	CollisionMapJudge(collisionMapInfo);
+
+	Player::judgeMove(collisionMapInfo);
 
 	hitCeilling(collisionMapInfo);
 
