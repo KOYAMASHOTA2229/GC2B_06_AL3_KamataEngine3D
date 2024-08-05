@@ -13,8 +13,6 @@ if (Input::GetInstance()->PushKey(DIK_SPACE)) {
 		isFinished_ = true;
 	}
 
-// 行列を定数バッファに転送
-	worldTransform_.TransferMatrix();
 
 }
 

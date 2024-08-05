@@ -11,7 +11,7 @@ class TitleScene {
 
 	public:
 
-void Initialize(Model* model, uint32_t textureHandle, ViewProjection* viewProjection);
+void Initialize();
 
 void Update();
 
