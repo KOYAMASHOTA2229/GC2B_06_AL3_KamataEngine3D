@@ -224,8 +224,12 @@ void Player::CollisionMapDownJudge(CollisionMapInfo& info) {
 		indexSet = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + info.move);
 		mapChipRect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
 
-		float breadth = worldTransform_.translation_.y - rect.top;
-		float margin = kBlankHeight + 2.0f;
+		/*float breadth = worldTransform_.translation_.y - rect.top;
+		float margin = kHeight + 2.0f;
+		float moveY = breadth - margin;*/
+
+		float breadth = rect.top - worldTransform_.translation_.y;
+		float margin = kHeight + 2.0f;
 		float moveY = breadth - margin;
 
 		info.move.y = std::max(0.0f, moveY);
@@ -269,7 +273,7 @@ void Player::CollisionMapLeftJudge(CollisionMapInfo& info) {
 		indexSet = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + info.move);
 		mapChipRect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
 
-		float breadth = rect.left - worldTransform_.translation_.x;
+		float breadth = rect.left-worldTransform_.translation_.x;
 		float margin = kBlankWidth / 2.0f;
 		float moveX = breadth - margin;
 
@@ -448,7 +452,8 @@ void Player::Update() {
 
 	hitCeilling(collisionMapInfo);
 
-	bool isLanding = Landing();
+	bool isLanding = false;
+	//Landing();
 
 	SwitchOnGround(isLanding);
 
