@@ -23,5 +23,9 @@ private:
 
 // 終了フラグ
 bool isFinished_ = false;
+	DirectXCommon* dxCommon_ = nullptr;
+	Input* input_ = nullptr;
+	Audio* audio_ = nullptr;
+
 
 };
