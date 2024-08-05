@@ -1,2 +1,13 @@
 #pragma once
-class TitleScene {};
+class TitleScene {
+
+	public:
+
+void Initialize();
+
+void Update();
+
+void Draw();
+
+
+};
