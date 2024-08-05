@@ -247,6 +247,11 @@ void ::GameScene::Update() { GameScene::ChangePhase(); }
 				worldTransformBlock->UpdateMatrix();
 			}
 		}
+
+		if (deathParticles_ && deathParticles_->GetIsFinished()) {
+		    isFinished_ = true;
+	    }
+
 	}
 
 

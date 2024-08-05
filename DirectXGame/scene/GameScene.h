@@ -56,6 +56,9 @@ private:
 	// 現在の現在フェーズ
 	Phase phase_;
 
+	// 終了フラグ
+	bool isFinished_ = false;
+
 public: // メンバ関数
 	/// <summary>
 	/// コンストクラタ
@@ -86,6 +89,9 @@ public: // メンバ関数
 	/// 描画
 	/// </summary>
 	void Draw();
+
+	/// デスフラグのgetter
+	bool IsFinished() const { return this->isFinished_; }
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;

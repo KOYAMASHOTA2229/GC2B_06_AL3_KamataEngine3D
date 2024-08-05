@@ -14,6 +14,9 @@ public:
 
 	void Draw();
 
+	// デスフラグのgetter
+	bool GetIsFinished() const { return isFinished_; }
+
 	private:
 
 	    Model* model_ = nullptr;
