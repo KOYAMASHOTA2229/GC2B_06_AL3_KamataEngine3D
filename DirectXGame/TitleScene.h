@@ -6,6 +6,7 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include <cassert>
 
 class TitleScene {
 
@@ -31,7 +32,6 @@ private:
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0;
 
-	ViewProjection* viewProjection_ = nullptr;
 
 // 終了フラグ
 bool isFinished_ = false;
@@ -39,6 +39,7 @@ bool isFinished_ = false;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 	Sprite* sprite_ = nullptr;
+	ViewProjection* viewProjection_ = nullptr;
 
 
 };

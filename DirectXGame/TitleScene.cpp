@@ -2,16 +2,20 @@
 #include "Player.h"
 #include "TextureManager.h"
 
+
 TitleScene::~TitleScene() { delete sprite_; }
 
 void TitleScene::Initialize() {
+
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
 	textureHandle_ = TextureManager::Load("TITLE.png");
+	
 
 	sprite_ = Sprite::Create(textureHandle_, {0, 0});
+
 
 }
 
