@@ -11,6 +11,8 @@ class TitleScene {
 
 	public:
 
+~TitleScene();
+
 void Initialize();
 
 void Update();
@@ -27,7 +29,7 @@ private:
 	// モデル
 	Model* model_ = nullptr;
 	// テクスチャハンドル
-	uint32_t textureHandle_ = 0u;
+	uint32_t textureHandle_ = 0;
 
 	ViewProjection* viewProjection_ = nullptr;
 
@@ -36,6 +38,7 @@ bool isFinished_ = false;
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
+	Sprite* sprite_ = nullptr;
 
 
 };

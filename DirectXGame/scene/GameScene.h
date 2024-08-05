@@ -96,10 +96,12 @@ public: // メンバ関数
 	/// デスフラグのgetter
 	bool IsFinished() const { return this->isFinished_; }
 
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
+	
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

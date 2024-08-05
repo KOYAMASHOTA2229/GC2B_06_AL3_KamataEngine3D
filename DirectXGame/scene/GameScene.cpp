@@ -69,8 +69,6 @@ void GameScene::Initialize() {
 	model_ = Model::Create();
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
-	textureHandle_ = TextureManager::Load("TITLE.png");
-
 	modelPlayer_ = Model::CreateFromOBJ("player", true);
 
 	modelEnemy_ = Model::CreateFromOBJ("enemy", true);
@@ -78,6 +76,9 @@ void GameScene::Initialize() {
 	mapChipField_ = new MapChipField();
 
 	mapChipField_->LoadMapChipCsv("Resources/block.csv");
+
+	
+
 	GenerateBlocks();
 	// 自キャラの位置生成
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1, 18);
