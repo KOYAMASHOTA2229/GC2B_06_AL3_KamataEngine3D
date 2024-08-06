@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Audio.h"
 #include "DirectXCommon.h"
 #include "Input.h"
@@ -6,8 +7,6 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
-#include <cassert>
-
 class TitleScene {
 
 	public:

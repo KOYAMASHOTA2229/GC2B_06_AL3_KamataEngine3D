@@ -1,6 +1,9 @@
 #include "TitleScene.h"
-#include "Player.h"
 #include "TextureManager.h"
+#include <cassert>
+#include "ImGuiManager.h"
+#include <PrimitiveDrawer.h>
+#include "AxisIndicator.h"
 
 
 TitleScene::~TitleScene() { delete sprite_; }
