@@ -80,8 +80,8 @@ private:
 	static inline const float kJumpAcceleration = 2.0f;
 
 	// キャラクターの当たり判定サイズ
-	static inline const float kWidth = 0.8f;
-	static inline const float kHeight = 2.0f;
+	static inline const float kWidth = 1.8f;
+	static inline const float kHeight = 1.8f;
 
 	static inline const float kAttenuationLanding = 0.4f;
 	static inline const float kAttenuationWall = 1.0f;
