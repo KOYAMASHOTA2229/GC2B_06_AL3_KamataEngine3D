@@ -20,6 +20,9 @@ GameScene::~GameScene() {
 
 	delete modelPlayer_;
 
+	delete modelGoal_;
+	delete goal_;
+
 	for (Enemy* enemy : enemies_) {
 		delete enemy;
 	}
@@ -77,8 +80,6 @@ void GameScene::Initialize() {
 
 	mapChipField_->LoadMapChipCsv("Resources/block.csv");
 
-	
-
 	GenerateBlocks();
 	// 自キャラの位置生成
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1, 18);
@@ -86,6 +87,12 @@ void GameScene::Initialize() {
 	player_ = new Player();
 	// 自キャラの初期化
 	player_->Initialize(modelPlayer_, &viewProjection_, playerPosition);
+
+	//ゴールの位置
+	Vector3 goalPosition = mapChipField_->GetMapChipPositionByIndex(48, 18);
+	modelGoal_ = Model::CreateFromOBJ("goal", true);
+	goal_ = new Clear();
+	goal_->Initialize(modelGoal_, &viewProjection_, goalPosition);
 
 	// デス演出用パーティクルの生成と初期化
 	modelDeathParticles_ = Model::CreateFromOBJ("deathParticles", true);
@@ -128,26 +135,26 @@ void GameScene::Initialize() {
 
 }
 
-void GameScene::CheckAllCollision() {
+void GameScene::EnemyCollision() {
 
 	#pragma region 自キャラと敵キャラの当たり判定
 
 	AABB aabb1, aabb2;
 
 	aabb1 = player_->GetAABB();
-	
+
 	for (Enemy* enemy : enemies_) {
 
 		aabb2 = enemy->GetAABB();
 
-			// AABB同士の交差判定
-			if (crossJudge::IsCollision(aabb1, aabb2)) {
-				// 自キャラの衝突時コールバック関数を呼び出す
-				player_->OnCollision(enemy);
+		// AABB同士の交差判定
+		if (crossJudge::IsCollision(aabb1, aabb2)) {
+			// 自キャラの衝突時コールバック関数を呼び出す
+			player_->OnCollision(enemy);
 
-				enemy->OnCollision(player_);
-			}
+			enemy->OnCollision(player_);
 		}
+	}
 	// 自キャラがデス状態
 	if (player_->GetIsDead()) {
 
@@ -162,12 +169,37 @@ void GameScene::CheckAllCollision() {
 
 }
 
+void GameScene::GoalCollision() {
+
+	AABB aabb1, aabb2;
+
+	aabb1 = player_->GetAABB();
+
+	aabb2 = goal_->GetAABB();
+
+	if (crossJudge::IsCollision(aabb1, aabb2)) {
+
+		isFinished_ = true;
+
+	}
+}
+
+void GameScene::CheckAllCollision() {
+
+	GameScene::EnemyCollision();
+
+	GameScene::GoalCollision();
+
+}
+
 void ::GameScene::Update() { GameScene::ChangePhase(); }
 
 	void GameScene::UpdatekPlay() {
 
 		// 自キャラの更新
 		player_->Update();
+
+		goal_->Update();
 
 		// 敵の更新
 		for (Enemy* enemy : enemies_) {
@@ -217,6 +249,8 @@ void ::GameScene::Update() { GameScene::ChangePhase(); }
 	}
 
 	void GameScene::UpdateKDeath() {
+
+		goal_->Update();
 
 		// 敵の更新
 		for (Enemy* enemy : enemies_) {
@@ -282,6 +316,8 @@ void GameScene::Draw() {
 	/// </summary>
 
 	player_->Draw();
+
+	goal_->Draw();
 
 	// デス演出用パーティクルの描画
 	if (deathParticles_ != nullptr) {

@@ -16,6 +16,7 @@
 #include "Enemy.h"
 #include "crossJudge.h"
 #include "DeathParticles.h"
+#include "Clear.h"
 
 enum class Phase {
 	kPlay,
@@ -25,7 +26,7 @@ enum class Phase {
 /// <summary>
 /// ゲームシーン
 /// </summary>
-class GameScene {
+class GameScene{
 private:
 
 	//  テクスチャハンドル
@@ -46,6 +47,9 @@ private:
 	Model* modelDeathParticles_ = nullptr;
 	DeathParticles* deathParticles_ = nullptr;
 
+	//ゴール
+	Model* modelGoal_ = nullptr;
+	Clear* goal_ = nullptr;
 
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 
@@ -75,6 +79,10 @@ public: // メンバ関数
 	/// 初期化
 	/// </summary>
 	void Initialize();
+
+	void EnemyCollision();
+
+	void GoalCollision();
 
 	void CheckAllCollision();
 
