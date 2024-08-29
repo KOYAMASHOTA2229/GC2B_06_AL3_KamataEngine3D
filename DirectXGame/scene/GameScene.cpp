@@ -93,12 +93,12 @@ void GameScene::Initialize() {
 	deathParticles_->Initialize(modelDeathParticles_, &viewProjection_, playerPosition);
 
 	// 敵キャラの位置生成
-	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(8, 18);
-	for (int32_t i = 0; i < 1; i++) {
+	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(12, 18);
+	for (int32_t i = 1; i < 8; i++) {
 		Enemy* newEnemy = new Enemy();
 
 		// X座標とY座標の計算を直接行う
-	 enemyPosition = mapChipField_->GetMapChipPositionByIndex(8 + i, 18 - i);
+	 enemyPosition = mapChipField_->GetMapChipPositionByIndex(12*i, 18);
 
 		newEnemy->Initialize(modelEnemy_, &viewProjection_, enemyPosition);
 		enemies_.push_back(newEnemy);

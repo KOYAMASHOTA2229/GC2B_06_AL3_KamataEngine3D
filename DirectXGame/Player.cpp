@@ -110,7 +110,6 @@ void Player::Move() {
 		velocity_.y = std::max(velocity_.y, -kLimitFallSpeed);
 	}
 
-
 }
 
 bool Player::Landing() {
